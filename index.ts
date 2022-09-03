@@ -11,6 +11,16 @@ import { ajax } from 'rxjs/ajax';
 // Використовуючи оператор interval, підписатися на нього і слухати до того моменту, доки значення не буде більше 5(використовуючи оператор в pipe)
 
 // Перетворіть coldInterval нижче на hotInterval, щоб він став гарячим(віддавав одні і ті ж значення різним підписникам)
+// Приклад:
+// sub1 subscribed
+// sub1 0
+// sub1 1
+// sub2 subscribed
+// sub1 2
+// sub2 2
+// sub1 3
+// sub2 3
+
 function coldInterval() {
   return new Observable((subscriber) => {
     let count = 0;
@@ -28,9 +38,10 @@ function coldInterval() {
   });
 }
 
-coldInterval().subscribe((value) => console.log('sub1:', value));
+const coldInterval$ = coldInterval();
+coldInterval$.subscribe((value) => console.log('sub1:', value));
 setTimeout(
-  () => coldInterval().subscribe((value) => console.log('sub2:', value)),
+  () => coldInterval$.subscribe((value) => console.log('sub2:', value)),
   3000
 );
 
